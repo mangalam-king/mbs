@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MBS Mats. Bank – Account Opening</title>
+  <title>MBS Mats. Bank – Online Account Opening</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -70,7 +70,6 @@
       margin-top: 15px;
     }
 
-    /* Responsive for smaller screens */
     @media (max-width: 700px) {
       .row input, .row select {
         min-width: 100%;
@@ -86,6 +85,10 @@
 
   <!-- Hidden field for account number -->
   <input type="hidden" name="account_no" id="account_no">
+  <!-- Hidden field for IFSC -->
+  <input type="hidden" name="ifsc_code" id="ifsc_code">
+  <!-- Hidden field for Pin -->
+  <input type="hidden" name="pin_code" id="pin_code">
 
   <h3>Personal Information</h3>
   <div class="row">
@@ -122,7 +125,7 @@
 
   <h3>Account Details</h3>
   <div class="row">
-    <select name="account_type" required>
+    <select name="account_type" id="account_type" required>
       <option value="">Account Type</option>
       <option>Savings Account</option>
       <option>Current Account</option>
@@ -130,8 +133,13 @@
       <option>Student Account</option>
       <option>Zero Balance Account</option>
     </select>
-    <input type="text" name="preferred_branch" placeholder="Preferred Branch">
-    <input type="text" name="ifsc_code" placeholder="IFSC Code (optional)">
+    <select name="branch" id="branch" required>
+      <option value="">Select Branch</option>
+      <option value="Main City">Main City</option>
+      <option value="Downtown">Downtown</option>
+      <option value="Uptown">Uptown</option>
+    </select>
+    <input type="text" name="ifsc_display" id="ifsc_display" placeholder="IFSC Code (auto)" disabled>
   </div>
 
   <textarea name="additional_info" placeholder="Additional Information (optional)"></textarea>
@@ -141,12 +149,38 @@
 </form>
 
 <script>
+  // Auto-generate account number
   function generateAccountNumber() {
-    const part1 = Math.random().toString().slice(2,6);  // 4 digits
-    const part2 = Math.random().toString().slice(2,7);  // 5 digits
+    const part1 = Math.random().toString().slice(2,6); // 4 digits
+    const part2 = Math.random().toString().slice(2,7); // 5 digits
     return `MBS-${part1}-${part2}`;
   }
   document.getElementById("account_no").value = generateAccountNumber();
+
+  // Auto-generate IFSC and Pin based on branch
+  const branchSelect = document.getElementById("branch");
+  const ifscField = document.getElementById("ifsc_display");
+  const ifscHidden = document.getElementById("ifsc_code");
+  const pinHidden = document.getElementById("pin_code");
+
+  const branchData = {
+    "Main City": { ifsc: "MBS0001", pin: "110001" },
+    "Downtown": { ifsc: "MBS0002", pin: "110002" },
+    "Uptown": { ifsc: "MBS0003", pin: "110003" }
+  };
+
+  branchSelect.addEventListener("change", function() {
+    const selected = branchData[this.value];
+    if(selected){
+      ifscField.value = selected.ifsc;
+      ifscHidden.value = selected.ifsc;
+      pinHidden.value = selected.pin;
+    } else {
+      ifscField.value = "";
+      ifscHidden.value = "";
+      pinHidden.value = "";
+    }
+  });
 </script>
 
 </body>
