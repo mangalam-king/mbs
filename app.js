@@ -3,6 +3,7 @@ import { getFirestore, collection, addDoc } from "https://www.gstatic.com/fireba
 
 console.log("app.js loaded");
 
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyA1rc5NCEGVCv6TQL2OkxwvrX2APsqNxJo",
   authDomain: "easy-13.firebaseapp.com",
@@ -15,32 +16,51 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// Generate account number
 function generateAccountNumber() {
   return "MBS" + Math.floor(1000000000 + Math.random() * 9000000000);
 }
 
+// Form submit
 document.getElementById("accountForm").addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  // ✅ SAFELY READ VALUES
+  const name = document.getElementById("name").value.trim();
+  const father = document.getElementById("father").value.trim();
+  const dob = document.getElementById("dob").value;
+  const gender = document.getElementById("gender").value;
+  const mobile = document.getElementById("mobile").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const accountType = document.getElementById("accountType").value;
+
+  // 🔒 Extra safety check
+  if (!name || !father || !dob || !gender || !mobile || !address || !accountType) {
+    alert("Please fill all fields");
+    return;
+  }
 
   try {
     await addDoc(collection(db, "accounts"), {
       accountNo: generateAccountNumber(),
       openingDate: new Date().toLocaleDateString(),
       status: "Pending",
-      name: name.value,
-      father: father.value,
-      dob: dob.value,
-      gender: gender.value,
-      mobile: mobile.value,
-      address: address.value,
-      accountType: accountType.value
+      name: name,
+      father: father,
+      dob: dob,
+      gender: gender,
+      mobile: mobile,
+      address: address,
+      accountType: accountType
     });
 
-    result.innerHTML = "✅ Account Created Successfully (Pending Approval)";
-    accountForm.reset();
+    document.getElementById("result").innerHTML =
+      "✅ Account Created Successfully (Pending Approval)";
 
-  } catch (err) {
-    alert(err.message);
-    console.error(err);
+    document.getElementById("accountForm").reset();
+
+  } catch (error) {
+    console.error(error);
+    alert("Error: " + error.message);
   }
 });
