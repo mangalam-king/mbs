@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>MBS Mats. Bank</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
@@ -10,9 +11,9 @@
 
 <form id="accountForm">
 
-  <input type="text" id="name" placeholder="Full Name" required>
-  <input type="text" id="father" placeholder="Father / Guardian Name" required>
-  
+  <input id="name" placeholder="Full Name" required>
+  <input id="father" placeholder="Father / Guardian Name" required>
+
   <label>Date of Birth</label>
   <input type="date" id="dob" required>
 
@@ -23,8 +24,8 @@
     <option>Other</option>
   </select>
 
-  <input type="text" id="mobile" placeholder="Mobile Number" required>
-  <input type="text" id="address" placeholder="Address" required>
+  <input id="mobile" placeholder="Mobile Number" required>
+  <input id="address" placeholder="Address" required>
 
   <select id="accountType" required>
     <option value="">Select Account Type</option>
@@ -36,11 +37,11 @@
   </select>
 
   <button type="submit">Create Account</button>
-
 </form>
 
 <p id="result"></p>
 
-<script type="module" src="app.js"></script>
+<script type="module" src="./app.js"></script>
 </body>
 </html>
+
