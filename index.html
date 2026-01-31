@@ -151,39 +151,29 @@
 </form>
 
 <script>
-  // Auto-generate account number
-  function generateAccountNumber() {
-    const part1 = Math.random().toString().slice(2,6); // 4 digits
-    const part2 = Math.random().toString().slice(2,7); // 5 digits
-    return `MBS-${part1}-${part2}`;
-  }
-  document.getElementById("account_no").value = generateAccountNumber();
-
-  // Auto-generate IFSC and Pin based on branch
-  const branchSelect = document.getElementById("branch");
-  const ifscField = document.getElementById("ifsc_display");
-  const ifscHidden = document.getElementById("ifsc_code");
-  const pinHidden = document.getElementById("pin_code");
-
-  const branchData = {
-    "Main City": { ifsc: "MBS0001", pin: "110001" },
-    "Downtown": { ifsc: "MBS0002", pin: "110002" },
-    "Uptown": { ifsc: "MBS0003", pin: "110003" }
+  // Map account type to first 4 digits
+  const accountTypeCode = {
+    "Savings Account": "1001",
+    "Current Account": "2001",
+    "Minor Account": "3001",
+    "Student Account": "4001",
+    "Zero Balance Account": "5001"
   };
 
-  branchSelect.addEventListener("change", function() {
-    const selected = branchData[this.value];
-    if(selected){
-      ifscField.value = selected.ifsc;
-      ifscHidden.value = selected.ifsc;
-      pinHidden.value = selected.pin;
-    } else {
-      ifscField.value = "";
-      ifscHidden.value = "";
-      pinHidden.value = "";
-    }
+  const accountTypeSelect = document.getElementById("account_type");
+  const accountNoField = document.getElementById("account_no");
+
+  function generateAccountNumber(type) {
+    const typeCode = accountTypeCode[type] || "9999"; // default if not selected
+    const randomPart = Math.floor(10000 + Math.random() * 90000); // 5-digit random
+    return `MBS-${typeCode}-${randomPart}`;
+  }
+
+  // Generate account number whenever account type is selected
+  accountTypeSelect.addEventListener("change", function() {
+    const accNum = generateAccountNumber(this.value);
+    accountNoField.value = accNum;
   });
 </script>
-
 </body>
 </html>
