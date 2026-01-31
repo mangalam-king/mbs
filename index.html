@@ -1,43 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>MBS Mats. Bank</title>
+  <meta charset="UTF-8">
+  <title>MBS Mats. Bank – Account Opening</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2ff;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #002b5c;
+      margin-bottom: 20px;
+    }
+    form {
+      background: #fff;
+      max-width: 800px;
+      margin: auto;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    h3 {
+      margin-top: 20px;
+      color: #002b5c;
+      border-bottom: 2px solid #002b5c;
+      padding-bottom: 5px;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .row input, .row select {
+      flex: 1;
+      min-width: calc(33% - 10px);
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    button {
+      background: #002b5c;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0050a0;
+    }
+    .note {
+      font-size: 13px;
+      color: #555;
+      margin-top: 15px;
+    }
+
+    /* Responsive for smaller screens */
+    @media (max-width: 700px) {
+      .row input, .row select {
+        min-width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<h2>Create Account – MBS Mats. Bank</h2>
+<h2>MBS Mats. Bank – Online Account Opening</h2>
 
-<form id="accountForm">
-  <input id="name" placeholder="Full Name" required><br><br>
-  <input id="father" placeholder="Father / Guardian Name" required><br><br>
+<form id="accountForm" action="https://formspree.io/f/xbdyeagw" method="POST">
 
-  <input type="date" id="dob" required><br><br>
+  <!-- Hidden field for account number -->
+  <input type="hidden" name="account_no" id="account_no">
 
-  <select id="gender" required>
-    <option value="">Select Gender</option>
-    <option>Male</option>
-    <option>Female</option>
-    <option>Other</option>
-  </select><br><br>
+  <h3>Personal Information</h3>
+  <div class="row">
+    <input type="text" name="first_name" placeholder="First Name" required>
+    <input type="text" name="middle_name" placeholder="Middle Name">
+    <input type="text" name="last_name" placeholder="Last Name" required>
+  </div>
 
-  <input id="mobile" placeholder="Mobile Number" required><br><br>
-  <input id="address" placeholder="Address" required><br><br>
+  <div class="row">
+    <input type="text" name="father_name" placeholder="Father / Guardian Name" required>
+    <input type="text" name="mother_name" placeholder="Mother Name">
+    <input type="text" name="guardian_relation" placeholder="Guardian Relation">
+  </div>
 
-  <select id="accountType" required>
-    <option value="">Select Account Type</option>
-    <option>Savings Account</option>
-    <option>Current Account</option>
-    <option>Minor Account</option>
-    <option>Student Account</option>
-    <option>Zero Balance Account</option>
-  </select><br><br>
+  <div class="row">
+    <input type="date" name="dob" placeholder="Date of Birth" required>
+    <select name="gender" required>
+      <option value="">Gender</option>
+      <option>Male</option>
+      <option>Female</option>
+      <option>Other</option>
+    </select>
+    <input type="text" name="marital_status" placeholder="Marital Status">
+  </div>
 
-  <!-- IMPORTANT -->
+  <div class="row">
+    <input type="text" name="nationality" placeholder="Nationality">
+    <input type="text" name="occupation" placeholder="Occupation">
+    <input type="text" name="mobile" placeholder="Mobile Number" required>
+  </div>
+
+  <input type="email" name="email" placeholder="Email Address">
+  <textarea name="address" placeholder="Full Residential Address" required></textarea>
+
+  <h3>Account Details</h3>
+  <div class="row">
+    <select name="account_type" required>
+      <option value="">Account Type</option>
+      <option>Savings Account</option>
+      <option>Current Account</option>
+      <option>Minor Account</option>
+      <option>Student Account</option>
+      <option>Zero Balance Account</option>
+    </select>
+    <input type="text" name="preferred_branch" placeholder="Preferred Branch">
+    <input type="text" name="ifsc_code" placeholder="IFSC Code (optional)">
+  </div>
+
+  <textarea name="additional_info" placeholder="Additional Information (optional)"></textarea>
+
   <button type="submit">Create Account</button>
+  <p class="note">All details will be sent securely to the bank email.</p>
 </form>
 
-<!-- MUST BE AT BOTTOM -->
-<script type="module" src="./app.js"></script>
+<script>
+  function generateAccountNumber() {
+    const part1 = Math.random().toString().slice(2,6);  // 4 digits
+    const part2 = Math.random().toString().slice(2,7);  // 5 digits
+    return `MBS-${part1}-${part2}`;
+  }
+  document.getElementById("account_no").value = generateAccountNumber();
+</script>
 
 </body>
 </html>
