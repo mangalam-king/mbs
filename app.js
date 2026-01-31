@@ -1,6 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+console.log("app.js loaded");
+
 const firebaseConfig = {
   apiKey: "AIzaSyA1rc5NCEGVCv6TQL2OkxwvrX2APsqNxJo",
   authDomain: "easy-13.firebaseapp.com",
@@ -13,7 +15,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Auto account number
 function generateAccountNumber() {
   return "MBS" + Math.floor(1000000000 + Math.random() * 9000000000);
 }
@@ -21,26 +22,25 @@ function generateAccountNumber() {
 document.getElementById("accountForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const accountNo = generateAccountNumber();
-  const openingDate = new Date().toLocaleDateString();
+  try {
+    await addDoc(collection(db, "accounts"), {
+      accountNo: generateAccountNumber(),
+      openingDate: new Date().toLocaleDateString(),
+      status: "Pending",
+      name: name.value,
+      father: father.value,
+      dob: dob.value,
+      gender: gender.value,
+      mobile: mobile.value,
+      address: address.value,
+      accountType: accountType.value
+    });
 
-  await addDoc(collection(db, "accounts"), {
-    accountNo: accountNo,
-    openingDate: openingDate,
-    status: "Pending",
-    name: name.value,
-    father: father.value,
-    dob: dob.value,
-    gender: gender.value,
-    mobile: mobile.value,
-    address: address.value,
-    accountType: accountType.value
-  });
+    result.innerHTML = "✅ Account Created Successfully (Pending Approval)";
+    accountForm.reset();
 
-  document.getElementById("result").innerHTML =
-    `✅ Account Created<br>
-     <b>Account No:</b> ${accountNo}<br>
-     <b>Status:</b> Pending Approval`;
-
-  document.getElementById("accountForm").reset();
+  } catch (err) {
+    alert(err.message);
+    console.error(err);
+  }
 });
