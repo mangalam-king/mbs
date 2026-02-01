@@ -1,179 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>MBS Mats. Bank – Online Account Opening</title>
+<meta charset="UTF-8">
+<title>MBS Mats. Bank – Account Opening</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #eef2ff;
-    padding: 20px;
-  }
-  h2 {
-    text-align: center;
-    color: #002b5c;
-    margin-bottom: 20px;
-  }
-  form {
-    background: #fff;
-    max-width: 800px;
-    margin: auto;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  }
-  h3 {
-    margin-top: 30px;
-    color: #002b5c;
-    border-bottom: 2px solid #002b5c;
-    padding-bottom: 5px;
-  }
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px; /* Increased gap between boxes */
-    margin-bottom: 20px; /* Space below the row */
-  }
-  .row input, .row select {
-    flex: 1;
-    min-width: calc(33% - 15px);
-    padding: 14px;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-  }
-  textarea {
-    width: 100%;
-    padding: 14px;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    margin-top: 15px; /* Space above textarea */
-  }
-  button {
-    background: #002b5c;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 30px;
-    width: 100%;
-    padding: 15px;
-    border-radius: 12px;
-    transition: 0.3s;
-  }
-  button:hover {
-    background: #0050a0;
-  }
-  .note {
-    font-size: 13px;
-    color: #555;
-    margin-top: 15px;
-  }
-
-  @media (max-width: 700px) {
-    .row input, .row select {
-      min-width: 100%;
-    }
-  }
+body{
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#e6f0ff,#f9fbff);
+  padding:20px;
+}
+form{
+  max-width:950px;
+  margin:auto;
+  background:#fff;
+  padding:30px;
+  border-radius:22px;
+  box-shadow:0 15px 35px rgba(0,0,0,.12);
+}
+h2{
+  text-align:center;
+  color:#003366;
+  margin-bottom:10px;
+}
+h3{
+  margin-top:35px;
+  color:#003366;
+  border-bottom:2px solid #003366;
+  padding-bottom:6px;
+}
+.row{
+  display:flex;
+  gap:25px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+input,select,textarea{
+  flex:1;
+  min-width:calc(33% - 20px);
+  padding:14px;
+  border-radius:16px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+textarea{min-width:100%}
+input[readonly]{background:#f3f7ff}
+button{
+  width:100%;
+  margin-top:40px;
+  padding:18px;
+  font-size:18px;
+  border:none;
+  border-radius:18px;
+  background:#003366;
+  color:white;
+  cursor:pointer;
+}
+button:hover{background:#0055aa}
+.note{
+  font-size:13px;
+  color:#555;
+  margin-top:10px;
+}
+@media(max-width:700px){
+  input,select{min-width:100%}
+}
 </style>
-
 </head>
+
 <body>
 
-<h2>MBS Mats. Bank – Online Account Opening</h2>
+<form action="https://formspree.io/f/xbdyeagw" method="POST" enctype="multipart/form-data">
 
-<form id="accountForm" action="https://formspree.io/f/xbdyeagw" method="POST">
+<h2>MBS Mats. Bank<br>Online Account Opening</h2>
 
-  <!-- Hidden field for account number -->
-  <input type="hidden" name="account_no" id="account_no">
-  <!-- Hidden field for IFSC -->
-  <input type="hidden" name="ifsc_code" id="ifsc_code">
-  <!-- Hidden field for Pin -->
-  <input type="hidden" name="pin_code" id="pin_code">
+<!-- PERSONAL INFO -->
+<h3>Personal Information</h3>
+<div class="row">
+  <input name="first_name" placeholder="First Name" required>
+  <input name="middle_name" placeholder="Middle Name">
+  <input name="last_name" placeholder="Last Name" required>
+</div>
 
-  <h3>Personal Information</h3>
-  <div class="row">
-    <input type="text" name="first_name" placeholder="First Name" required>
-    <input type="text" name="middle_name" placeholder="Middle Name">
-    <input type="text" name="last_name" placeholder="Last Name" required>
-  </div>
+<div class="row">
+  <input name="guardian_name" placeholder="Father / Guardian Name" required>
+  <input type="date" name="dob" required>
+  <select name="gender" required>
+    <option value="">Gender</option>
+    <option>Male</option>
+    <option>Female</option>
+    <option>Other</option>
+  </select>
+</div>
 
-  <div class="row">
-    <input type="text" name="father_name" placeholder="Father / Guardian Name" required>
-    <input type="text" name="mother_name" placeholder="Mother Name">
-    <input type="text" name="guardian_relation" placeholder="Guardian Relation">
-  </div>
+<div class="row">
+  <input name="mobile" type="tel" placeholder="Mobile Number" required>
+  <input name="email" type="email" placeholder="Email Address">
+</div>
 
-  <div class="row">
-    <input type="date" name="dob" placeholder="Date of Birth" required>
-    <select name="gender" required>
-      <option value="">Gender</option>
-      <option>Male</option>
-      <option>Female</option>
-      <option>Other</option>
-    </select>
-    <input type="text" name="marital_status" placeholder="Marital Status">
-  </div>
+<!-- ACCOUNT DETAILS -->
+<h3>Account Details</h3>
+<div class="row">
+  <select id="account_type" name="account_type" required>
+    <option value="">Select Account Type</option>
+    <option>Savings Account</option>
+    <option>Current Account</option>
+    <option>Student Account</option>
+    <option>Minor Account</option>
+    <option>Zero Balance Account</option>
+  </select>
 
-  <div class="row">
-    <input type="text" name="nationality" placeholder="Nationality">
-    <input type="text" name="occupation" placeholder="Occupation">
-    <input type="text" name="mobile" placeholder="Mobile Number" required>
-  </div>
+  <input id="account_no" name="account_number" placeholder="Account Number" readonly required>
 
-  <input type="email" name="email" placeholder="Email Address">
-  <textarea name="address" placeholder="Full Residential Address" required></textarea>
+  <input id="open_date" name="opening_date" readonly>
+</div>
 
-  <h3>Account Details</h3>
-  <div class="row">
-    <select name="account_type" id="account_type" required>
-      <option value="">Account Type</option>
-      <option>Savings Account</option>
-      <option>Current Account</option>
-      <option>Minor Account</option>
-      <option>Student Account</option>
-      <option>Zero Balance Account</option>
-    </select>
-    <select name="branch" id="branch" required>
-      <option value="">Select Branch</option>
-      <option value="Main City">Main City</option>
-      <option value="Downtown">Downtown</option>
-      <option value="Uptown">Uptown</option>
-    </select>
-    <input type="text" name="ifsc_display" id="ifsc_display" placeholder="IFSC Code (auto)" disabled>
-  </div>
+<!-- ADDRESS -->
+<h3>Address & Branch Details</h3>
+<div class="row">
+  <select id="state" name="state" required>
+    <option value="">Select State</option>
+  </select>
 
-  <textarea name="additional_info" placeholder="Additional Information (optional)"></textarea>
+  <select id="district" name="district" required>
+    <option value="">Select District</option>
+  </select>
 
-  <button type="submit">Create Account</button>
-  <p class="note">All details will be sent securely to the bank email.</p>
+  <input id="place" name="place" placeholder="Place / Village / City" required>
+</div>
+
+<div class="row">
+  <input id="pincode" name="pincode" placeholder="PIN Code" readonly>
+  <input id="ifsc" name="ifsc_code" placeholder="IFSC Code" readonly>
+</div>
+
+<div class="row">
+  <textarea name="full_address" placeholder="Complete Residential Address" required></textarea>
+</div>
+
+<!-- SIGNATURE -->
+<h3>Signature</h3>
+<div class="row">
+  <input type="file" name="signature" accept="image/*" required>
+</div>
+
+<p class="note">
+No PAN or Aadhaar required. Demo / educational banking interface.
+</p>
+
+<button type="submit">Create Account</button>
+
 </form>
 
 <script>
-  // Map account type to first 4 digits
-  const accountTypeCode = {
-    "Savings Account": "1001",
-    "Current Account": "2001",
-    "Minor Account": "3001",
-    "Student Account": "4001",
-    "Zero Balance Account": "5001"
-  };
+// Opening date
+document.getElementById("open_date").value =
+  new Date().toISOString().split("T")[0];
 
-  const accountTypeSelect = document.getElementById("account_type");
-  const accountNoField = document.getElementById("account_no");
+// Account number
+const accMap={
+  "Savings Account":"1001",
+  "Current Account":"2001",
+  "Student Account":"4001",
+  "Minor Account":"3001",
+  "Zero Balance Account":"5001"
+};
 
-  function generateAccountNumber(type) {
-    const typeCode = accountTypeCode[type] || "9999"; // default if not selected
-    const randomPart = Math.floor(10000 + Math.random() * 90000); // 5-digit random
-    return `MBS-${typeCode}-${randomPart}`;
-  }
+document.getElementById("account_type").onchange=e=>{
+  const code=accMap[e.target.value]||"9999";
+  const rnd=Math.floor(100000+Math.random()*900000);
+  document.getElementById("account_no").value=`MBS-${code}-${rnd}`;
+};
 
-  // Generate account number whenever account type is selected
-  accountTypeSelect.addEventListener("change", function() {
-    const accNum = generateAccountNumber(this.value);
-    accountNoField.value = accNum;
+// Load ALL INDIA states & districts
+fetch("https://cdn.jsdelivr.net/npm/india-state-district@latest/state_district.json")
+.then(r=>r.json())
+.then(data=>{
+  const s=document.getElementById("state");
+  const d=document.getElementById("district");
+
+  Object.keys(data).forEach(st=>{
+    s.innerHTML+=`<option>${st}</option>`;
   });
+
+  s.onchange=()=>{
+    d.innerHTML=`<option value="">Select District</option>`;
+    if(!s.value) return;
+    data[s.value].forEach(dist=>{
+      d.innerHTML+=`<option>${dist}</option>`;
+    });
+  };
+});
+
+// Place → PIN (ALL INDIA)
+document.getElementById("place").addEventListener("blur",()=>{
+  const q=`${place.value}, ${district.value}, ${state.value}, India`;
+  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}`)
+  .then(r=>r.json())
+  .then(res=>{
+    if(res[0]){
+      fetch(`https://nominatim.openstreetmap.org/details.php?format=json&place_id=${res[0].place_id}`)
+      .then(r=>r.json())
+      .then(d=>{
+        if(d.address && d.address.postcode){
+          pincode.value=d.address.postcode;
+        }
+      });
+    }
+  });
+});
+
+// IFSC generation
+document.getElementById("district").addEventListener("change",()=>{
+  if(!state.value||!district.value) return;
+  ifsc.value="MBS0"+
+    state.value.substring(0,2).toUpperCase()+
+    district.value.substring(0,2).toUpperCase()+
+    "01";
+});
 </script>
+
 </body>
 </html>
