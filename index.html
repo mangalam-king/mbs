@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MBS Mats. Bank – Account Opening</title>
+<title>MBS Mats. Bank – Online Account Opening</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg,#e6f0ff,#f9fbff);
+  background: linear-gradient(135deg,#e7f0ff,#f9fbff);
   padding:20px;
 }
 form{
@@ -22,7 +22,6 @@ form{
 h2{
   text-align:center;
   color:#003366;
-  margin-bottom:10px;
 }
 h3{
   margin-top:35px;
@@ -75,7 +74,7 @@ button:hover{background:#0055aa}
 
 <h2>MBS Mats. Bank<br>Online Account Opening</h2>
 
-<!-- PERSONAL INFO -->
+<!-- PERSONAL INFORMATION -->
 <h3>Personal Information</h3>
 <div class="row">
   <input name="first_name" placeholder="First Name" required>
@@ -95,8 +94,8 @@ button:hover{background:#0055aa}
 </div>
 
 <div class="row">
-  <input name="mobile" type="tel" placeholder="Mobile Number" required>
-  <input name="email" type="email" placeholder="Email Address">
+  <input type="tel" name="mobile" placeholder="Mobile Number" required>
+  <input type="email" name="email" placeholder="Email Address">
 </div>
 
 <!-- ACCOUNT DETAILS -->
@@ -112,7 +111,6 @@ button:hover{background:#0055aa}
   </select>
 
   <input id="account_no" name="account_number" placeholder="Account Number" readonly required>
-
   <input id="open_date" name="opening_date" readonly>
 </div>
 
@@ -127,7 +125,7 @@ button:hover{background:#0055aa}
     <option value="">Select District</option>
   </select>
 
-  <input id="place" name="place" placeholder="Place / Village / City" required>
+  <input id="place" name="place" placeholder="Village / City / Area" required>
 </div>
 
 <div class="row">
@@ -140,13 +138,13 @@ button:hover{background:#0055aa}
 </div>
 
 <!-- SIGNATURE -->
-<h3>Signature</h3>
+<h3>Signature Upload</h3>
 <div class="row">
   <input type="file" name="signature" accept="image/*" required>
 </div>
 
 <p class="note">
-No PAN or Aadhaar required. Demo / educational banking interface.
+No PAN / Aadhaar required. Demo / educational banking interface.
 </p>
 
 <button type="submit">Create Account</button>
@@ -158,7 +156,7 @@ No PAN or Aadhaar required. Demo / educational banking interface.
 document.getElementById("open_date").value =
   new Date().toISOString().split("T")[0];
 
-// Account number
+// Account number logic
 const accMap={
   "Savings Account":"1001",
   "Current Account":"2001",
@@ -167,56 +165,68 @@ const accMap={
   "Zero Balance Account":"5001"
 };
 
-document.getElementById("account_type").onchange=e=>{
+document.getElementById("account_type").addEventListener("change",e=>{
   const code=accMap[e.target.value]||"9999";
   const rnd=Math.floor(100000+Math.random()*900000);
   document.getElementById("account_no").value=`MBS-${code}-${rnd}`;
-};
-
-// Load ALL INDIA states & districts
-fetch("https://cdn.jsdelivr.net/npm/india-state-district@latest/state_district.json")
-.then(r=>r.json())
-.then(data=>{
-  const s=document.getElementById("state");
-  const d=document.getElementById("district");
-
-  Object.keys(data).forEach(st=>{
-    s.innerHTML+=`<option>${st}</option>`;
-  });
-
-  s.onchange=()=>{
-    d.innerHTML=`<option value="">Select District</option>`;
-    if(!s.value) return;
-    data[s.value].forEach(dist=>{
-      d.innerHTML+=`<option>${dist}</option>`;
-    });
-  };
 });
 
-// Place → PIN (ALL INDIA)
+// ===== STATE & DISTRICT (FIXED BUG) =====
+const stateSel=document.getElementById("state");
+const districtSel=document.getElementById("district");
+
+fetch("https://cdn.jsdelivr.net/npm/india-state-district@latest/state_district.json")
+.then(res=>res.json())
+.then(data=>{
+  data.forEach(item=>{
+    const opt=document.createElement("option");
+    opt.value=item.state;
+    opt.textContent=item.state;
+    stateSel.appendChild(opt);
+  });
+
+  stateSel.addEventListener("change",()=>{
+    districtSel.innerHTML='<option value="">Select District</option>';
+    const selected=data.find(s=>s.state===stateSel.value);
+    if(!selected) return;
+
+    selected.districts.forEach(d=>{
+      const opt=document.createElement("option");
+      opt.value=d;
+      opt.textContent=d;
+      districtSel.appendChild(opt);
+    });
+  });
+});
+
+// ===== PINCODE (ALL INDIA) =====
 document.getElementById("place").addEventListener("blur",()=>{
-  const q=`${place.value}, ${district.value}, ${state.value}, India`;
-  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}`)
-  .then(r=>r.json())
-  .then(res=>{
-    if(res[0]){
-      fetch(`https://nominatim.openstreetmap.org/details.php?format=json&place_id=${res[0].place_id}`)
+  if(!stateSel.value||!districtSel.value) return;
+
+  const query=`${place.value}, ${districtSel.value}, ${stateSel.value}, India`;
+
+  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
+  .then(res=>res.json())
+  .then(result=>{
+    if(result[0]){
+      fetch(`https://nominatim.openstreetmap.org/details.php?format=json&place_id=${result[0].place_id}`)
       .then(r=>r.json())
-      .then(d=>{
-        if(d.address && d.address.postcode){
-          pincode.value=d.address.postcode;
+      .then(info=>{
+        if(info.address && info.address.postcode){
+          document.getElementById("pincode").value=info.address.postcode;
         }
       });
     }
   });
 });
 
-// IFSC generation
-document.getElementById("district").addEventListener("change",()=>{
-  if(!state.value||!district.value) return;
-  ifsc.value="MBS0"+
-    state.value.substring(0,2).toUpperCase()+
-    district.value.substring(0,2).toUpperCase()+
+// ===== IFSC GENERATION =====
+districtSel.addEventListener("change",()=>{
+  if(!stateSel.value||!districtSel.value) return;
+  document.getElementById("ifsc").value=
+    "MBS0"+
+    stateSel.value.substring(0,2).toUpperCase()+
+    districtSel.value.substring(0,2).toUpperCase()+
     "01";
 });
 </script>
