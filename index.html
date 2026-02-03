@@ -2,247 +2,276 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MBS Mats. Bank – Online Account Opening</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Opening Form</title>
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
+:root{
+  --sky:#4fc3f7;
+  --violet:#6a1b9a;
+  --gold:#d4af37;
+  --silver:#cfd8dc;
+}
 body{
-  font-family: Arial, sans-serif;
-  background:#f2f6fb;
   margin:0;
+  font-family:Segoe UI, Arial;
+  background:linear-gradient(135deg,var(--sky),var(--violet));
 }
 .container{
-  max-width:1100px;
+  max-width:850px;
   margin:30px auto;
   background:#fff;
-  padding:25px;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  overflow:hidden;
 }
-h1{
+.header{
+  background:linear-gradient(135deg,var(--violet),var(--sky));
+  color:#fff;
+  padding:25px;
   text-align:center;
-  color:#0a2a66;
 }
 .section{
-  margin-top:25px;
+  padding:25px;
+  border-bottom:1px solid var(--silver);
 }
-.section h2{
-  color:#0a2a66;
-  border-bottom:2px solid #e3e9f5;
-  padding-bottom:5px;
+.section-title{
+  color:var(--violet);
+  font-weight:600;
+  border-left:5px solid var(--gold);
+  padding-left:10px;
+  margin-bottom:15px;
 }
-.grid-3{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
-}
-.grid-2{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:18px;
-}
-.field{
-  display:flex;
-  flex-direction:column;
-}
-label{
-  font-size:14px;
-  margin-bottom:5px;
-}
-input, select{
-  padding:10px;
-  border-radius:10px;
-  border:1px solid #ccc;
-  font-size:15px;
-}
-input[readonly]{
-  background:#f4f6fa;
-}
-button{
-  margin-top:25px;
+label{display:block;margin:10px 0 5px;}
+input,select,textarea{
   width:100%;
-  padding:14px;
-  background:#0a2a66;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid var(--silver);
+}
+textarea{resize:vertical}
+.radio-group label{display:inline-block;margin-right:20px}
+.id-section{display:none}
+canvas{border:2px dashed var(--silver);border-radius:8px}
+.footer{text-align:center;padding:25px}
+button{
+  background:linear-gradient(135deg,var(--violet),var(--sky));
   color:#fff;
   border:none;
-  border-radius:12px;
-  font-size:17px;
+  padding:14px 40px;
+  font-size:16px;
+  border-radius:30px;
   cursor:pointer;
 }
-button:hover{
-  background:#123d91;
-}
-
-/* Signature pad */
-#signature-pad{
-  border:2px dashed #999;
-  border-radius:12px;
-  height:180px;
-}
-.sig-buttons{
-  margin-top:10px;
-  display:flex;
-  gap:10px;
-}
-.sig-buttons button{
-  flex:1;
-  padding:10px;
-  font-size:14px;
-}
-@media(max-width:800px){
-  .grid-3,.grid-2{grid-template-columns:1fr;}
-}
+button:disabled{opacity:.5;cursor:not-allowed}
 </style>
 </head>
 
 <body>
-
 <div class="container">
-<h1>MBS Mats. Bank<br>Online Account Opening</h1>
-
-<form id="bankForm" action="https://formspree.io/f/xbdyeagw" method="POST">
-
-<!-- PERSONAL INFO -->
-<div class="section">
-<h2>Personal Information</h2>
-<div class="grid-3">
-  <div class="field">
-    <label>First Name</label>
-    <input name="first_name" required>
-  </div>
-  <div class="field">
-    <label>Middle Name</label>
-    <input name="middle_name">
-  </div>
-  <div class="field">
-    <label>Last Name</label>
-    <input name="last_name" required>
-  </div>
+<div class="header">
+  <h2>Bank Account Opening Form</h2>
 </div>
 
-<div class="grid-3">
-  <div class="field">
-    <label>Date of Birth</label>
-    <input type="date" name="dob" required>
-  </div>
-  <div class="field">
-    <label>Gender</label>
-    <select name="gender" required>
-      <option value="">Select</option>
-      <option>Male</option>
-      <option>Female</option>
-      <option>Other</option>
-    </select>
-  </div>
-  <div class="field">
-    <label>Mobile Number</label>
-    <input name="mobile" required>
-  </div>
+<form id="accountForm"
+action="https://formspree.io/f/xbdyeagw"
+method="POST"
+enctype="multipart/form-data">
+
+<!-- ACCOUNT INFO -->
+<div class="section">
+<div class="section-title">Account Information</div>
+
+<label>Account Number</label>
+<input type="text" name="Account Number" id="accountNumber" readonly>
+
+<label>Application Date</label>
+<input type="text" name="Application Date" id="todayDate" readonly>
+</div>
+
+<!-- PERSONAL -->
+<div class="section">
+<div class="section-title">Personal Details</div>
+
+<label>Full Name</label>
+<input type="text" name="Name" required>
+
+<label>Father / Mother Name</label>
+<input type="text" name="Parent Name" required>
+
+<label>Date of Birth</label>
+<input type="date" name="DOB" required>
+
+<label>Gender</label>
+<select name="Gender" required>
+<option value="">Select</option>
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+</select>
+
+<label>Mobile Number</label>
+<input type="text" name="Mobile" id="mobile" maxlength="10" required>
+
+<label>Email</label>
+<input type="email" name="Email">
+
+<label>Nationality</label>
+<input type="text" name="Nationality" value="Indian" required>
+</div>
+
+<!-- ADDRESS -->
+<div class="section">
+<div class="section-title">Address Details</div>
+
+<label>Residential Address</label>
+<textarea name="Address" required></textarea>
+
+<label>City</label>
+<input type="text" name="City" required>
+
+<label>State</label>
+<input type="text" name="State" required>
+
+<label>PIN Code</label>
+<input type="text" name="PIN" maxlength="6" required>
+</div>
+
+<!-- IDENTITY -->
+<div class="section">
+<div class="section-title">Identity Proof</div>
+
+<div class="radio-group">
+<label><input type="radio" name="ID Type" value="MATS" onclick="selectID('mats')" required> MATS</label>
+<label><input type="radio" name="ID Type" value="Form60" onclick="selectID('form60')"> Form 60</label>
+</div>
+
+<div id="matsBox" class="id-section">
+<label>Select MATS Number</label>
+<select name="MATS Number">
+<option value="">Select</option>
+<option>2016</option>
+<option>1234</option>
+</select>
+</div>
+
+<div id="form60Box" class="id-section">
+<label>Form 60 Number</label>
+<input type="text" name="Form60 Number">
+<label>Form 60 Address</label>
+<input type="text" name="Form60 Address">
+<label>Date</label>
+<input type="date" name="Form60 Date">
 </div>
 </div>
 
 <!-- ACCOUNT DETAILS -->
 <div class="section">
-<h2>Account Details</h2>
-<div class="grid-3">
-  <div class="field">
-    <label>Account Type</label>
-    <select id="accountType" name="account_type" required>
-      <option value="">Select</option>
-      <option value="1001">Savings Account</option>
-      <option value="2001">Current Account</option>
-      <option value="3001">Student Account</option>
-    </select>
-  </div>
+<div class="section-title">Account Details</div>
 
-  <div class="field">
-    <label>Account Number</label>
-    <input id="accountNumber" name="account_number" readonly>
-  </div>
+<label>Account Type</label>
+<select name="Account Type" required>
+<option value="">Select</option>
+<option>Savings</option>
+<option>Current</option>
+<option>Zero Balance</option>
+</select>
 
-  <div class="field">
-    <label>Opening Date</label>
-    <input id="openDate" name="opening_date" readonly>
-  </div>
-</div>
-</div>
+<label>Initial Deposit (₹)</label>
+<input type="number" name="Deposit" required>
 
-<!-- ADDRESS -->
-<div class="section">
-<h2>Address</h2>
-<div class="grid-2">
-  <div class="field">
-    <label>Address Line</label>
-    <input name="address" required>
-  </div>
-  <div class="field">
-    <label>Pincode</label>
-    <input name="pincode" required>
-  </div>
-</div>
+<label>Mode of Operation</label>
+<select name="Mode" required>
+<option value="">Select</option>
+<option>Self</option>
+<option>Either or Survivor</option>
+<option>Joint</option>
+</select>
 </div>
 
 <!-- SIGNATURE -->
 <div class="section">
-<h2>Draw Signature</h2>
-<canvas id="signature-pad"></canvas>
-
-<div class="sig-buttons">
-  <button type="button" onclick="clearSignature()">Clear</button>
+<div class="section-title">Signature</div>
+<canvas id="signaturePad" width="600" height="200"></canvas><br><br>
+<button type="button" onclick="clearSignature()">Clear</button>
+<input type="hidden" name="Signature" id="signatureData">
 </div>
 
-<input type="hidden" name="signature_data" id="signatureData">
+<!-- DECLARATION -->
+<div class="footer">
+<label>
+<input type="checkbox" required>
+I declare that the information provided is true and correct.
+</label><br><br>
+<button type="submit" id="submitBtn" disabled>Submit Application</button>
 </div>
 
-<button type="submit">Create Account</button>
 </form>
 </div>
 
 <script>
-const accType = document.getElementById("accountType");
-const accNo = document.getElementById("accountNumber");
-const dateField = document.getElementById("openDate");
+// DATE
+const d=new Date();
+todayDate.value=`${String(d.getDate()).padStart(2,"0")}-${String(d.getMonth()+1).padStart(2,"0")}-${d.getFullYear()}`;
 
-// Date
-dateField.value = new Date().toLocaleDateString();
+// ID toggle
+function selectID(t){
+matsBox.style.display=t==="mats"?"block":"none";
+form60Box.style.display=t==="form60"?"block":"none";
+}
 
-// Account number generation
-accType.addEventListener("change", ()=>{
-  if(!accType.value) return;
-  let random = Math.floor(100000 + Math.random()*900000);
-  accNo.value = accType.value + "-" + random;
+// MOBILE + ACCOUNT NO
+let generated=false;
+mobile.addEventListener("input",()=>{
+mobile.value=mobile.value.replace(/\D/g,"");
+if(/^[0-9]{10}$/.test(mobile.value)){
+submitBtn.disabled=false;
+if(!generated){
+const last4=mobile.value.slice(-4);
+const first4=Math.floor(1000+Math.random()*9000);
+accountNumber.value=first4+last4;
+generated=true;
+}
+}else submitBtn.disabled=true;
 });
 
-// Signature pad
-const canvas = document.getElementById("signature-pad");
-const ctx = canvas.getContext("2d");
-canvas.width = canvas.offsetWidth;
-canvas.height = canvas.offsetHeight;
-let drawing = false;
+// SIGNATURE PAD
+const canvas=signaturePad,ctx=canvas.getContext("2d");
+let draw=false;
+canvas.onmousedown=e=>{draw=true;ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);}
+canvas.onmousemove=e=>{if(draw){ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}}
+canvas.onmouseup=()=>draw=false;
+canvas.addEventListener("touchstart",e=>{
+draw=true;const t=e.touches[0];ctx.beginPath();
+ctx.moveTo(t.clientX-canvas.offsetLeft,t.clientY-canvas.offsetTop);
+});
+canvas.addEventListener("touchmove",e=>{
+if(draw){const t=e.touches[0];
+ctx.lineTo(t.clientX-canvas.offsetLeft,t.clientY-canvas.offsetTop);
+ctx.stroke();}
+});
+canvas.addEventListener("touchend",()=>draw=false);
+function clearSignature(){ctx.clearRect(0,0,canvas.width,canvas.height);}
 
-canvas.addEventListener("mousedown", ()=>drawing=true);
-canvas.addEventListener("mouseup", ()=>drawing=false);
-canvas.addEventListener("mouseleave", ()=>drawing=false);
-canvas.addEventListener("mousemove", draw);
-
-function draw(e){
-  if(!drawing) return;
-  ctx.lineWidth = 2;
-  ctx.lineCap = "round";
-  ctx.strokeStyle = "#000";
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(e.offsetX, e.offsetY);
-}
-
-function clearSignature(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-}
-
-// Save signature before submit
-document.getElementById("bankForm").addEventListener("submit",()=>{
-  document.getElementById("signatureData").value = canvas.toDataURL();
+// PDF GENERATION
+accountForm.addEventListener("submit",function(e){
+e.preventDefault();
+signatureData.value=canvas.toDataURL();
+const {jsPDF}=window.jspdf;
+const pdf=new jsPDF();
+let y=10;
+pdf.text("BANK ACCOUNT OPENING FORM",50,y); y+=10;
+new FormData(this).forEach((v,k)=>{
+if(k!=="Signature"){pdf.text(`${k}: ${v}`,10,y);y+=6;}
+});
+pdf.addPage();
+pdf.text("Signature",10,20);
+pdf.addImage(signatureData.value,"PNG",10,30,80,30);
+pdf.save("Account_Opening_Form.pdf");
+setTimeout(()=>this.submit(),500);
 });
 </script>
 
