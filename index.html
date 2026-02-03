@@ -2,276 +2,188 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Account Opening Form</title>
 
 <!-- jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-:root{
-  --sky:#4fc3f7;
-  --violet:#6a1b9a;
-  --gold:#d4af37;
-  --silver:#cfd8dc;
-}
 body{
-  margin:0;
-  font-family:Segoe UI, Arial;
-  background:linear-gradient(135deg,var(--sky),var(--violet));
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#7f3fbf,#5dade2);
+  margin:0; padding:0;
 }
 .container{
-  max-width:850px;
+  max-width:900px;
   margin:30px auto;
   background:#fff;
-  border-radius:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-  overflow:hidden;
-}
-.header{
-  background:linear-gradient(135deg,var(--violet),var(--sky));
-  color:#fff;
+  border-radius:12px;
   padding:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+h1{
   text-align:center;
+  color:#5b2c6f;
 }
 .section{
-  padding:25px;
-  border-bottom:1px solid var(--silver);
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:15px;
+  margin-top:15px;
 }
-.section-title{
-  color:var(--violet);
-  font-weight:600;
-  border-left:5px solid var(--gold);
-  padding-left:10px;
-  margin-bottom:15px;
+.section h3{
+  margin-top:0;
+  color:#2471a3;
 }
-label{display:block;margin:10px 0 5px;}
+label{display:block;margin-top:10px;font-weight:bold;}
 input,select,textarea{
   width:100%;
-  padding:10px;
-  border-radius:6px;
-  border:1px solid var(--silver);
+  padding:8px;
+  margin-top:4px;
+  border-radius:5px;
+  border:1px solid #ccc;
 }
-textarea{resize:vertical}
-.radio-group label{display:inline-block;margin-right:20px}
-.id-section{display:none}
-canvas{border:2px dashed var(--silver);border-radius:8px}
-.footer{text-align:center;padding:25px}
+.id-box{display:none;margin-top:10px;}
 button{
-  background:linear-gradient(135deg,var(--violet),var(--sky));
-  color:#fff;
-  border:none;
-  padding:14px 40px;
+  margin-top:20px;
+  width:100%;
+  padding:12px;
   font-size:16px;
-  border-radius:30px;
+  border:none;
+  border-radius:8px;
+  background:linear-gradient(90deg,#d4af37,#c0c0c0);
   cursor:pointer;
 }
-button:disabled{opacity:.5;cursor:not-allowed}
+button:disabled{opacity:.5;cursor:not-allowed;}
 </style>
 </head>
 
 <body>
 <div class="container">
-<div class="header">
-  <h2>Bank Account Opening Form</h2>
-</div>
 
-<form id="accountForm"
-action="https://formspree.io/f/xbdyeagw"
-method="POST"
-enctype="multipart/form-data">
+<h1>Account Opening Form</h1>
 
-<!-- ACCOUNT INFO -->
+<form id="accountForm" action="https://formspree.io/f/xbdyeagw" method="POST">
+
+<!-- BASIC DETAILS -->
 <div class="section">
-<div class="section-title">Account Information</div>
-
-<label>Account Number</label>
-<input type="text" name="Account Number" id="accountNumber" readonly>
-
-<label>Application Date</label>
-<input type="text" name="Application Date" id="todayDate" readonly>
-</div>
-
-<!-- PERSONAL -->
-<div class="section">
-<div class="section-title">Personal Details</div>
-
+<h3>Basic Details</h3>
 <label>Full Name</label>
-<input type="text" name="Name" required>
-
-<label>Father / Mother Name</label>
-<input type="text" name="Parent Name" required>
+<input name="Full Name" required>
 
 <label>Date of Birth</label>
 <input type="date" name="DOB" required>
 
-<label>Gender</label>
-<select name="Gender" required>
-<option value="">Select</option>
-<option>Male</option>
-<option>Female</option>
-<option>Other</option>
-</select>
-
 <label>Mobile Number</label>
-<input type="text" name="Mobile" id="mobile" maxlength="10" required>
+<input id="mobile" name="Mobile" maxlength="10" required>
 
 <label>Email</label>
 <input type="email" name="Email">
 
-<label>Nationality</label>
-<input type="text" name="Nationality" value="Indian" required>
-</div>
-
-<!-- ADDRESS -->
-<div class="section">
-<div class="section-title">Address Details</div>
-
-<label>Residential Address</label>
+<label>Address</label>
 <textarea name="Address" required></textarea>
-
-<label>City</label>
-<input type="text" name="City" required>
-
-<label>State</label>
-<input type="text" name="State" required>
-
-<label>PIN Code</label>
-<input type="text" name="PIN" maxlength="6" required>
 </div>
 
-<!-- IDENTITY -->
+<!-- ID PROOF -->
 <div class="section">
-<div class="section-title">Identity Proof</div>
+<h3>Identity Proof</h3>
 
-<div class="radio-group">
-<label><input type="radio" name="ID Type" value="MATS" onclick="selectID('mats')" required> MATS</label>
-<label><input type="radio" name="ID Type" value="Form60" onclick="selectID('form60')"> Form 60</label>
+<label><input type="radio" name="ID Proof" value="MATS" onclick="toggleID('mats')" required> MATS Number</label>
+<label><input type="radio" name="ID Proof" value="Form 60" onclick="toggleID('form60')"> Form 60</label>
+
+<div id="mats" class="id-box">
+  <label>MATS Number</label>
+  <input name="MATS Number">
 </div>
 
-<div id="matsBox" class="id-section">
-<label>Select MATS Number</label>
-<select name="MATS Number">
-<option value="">Select</option>
-<option>2016</option>
-<option>1234</option>
-</select>
+<div id="form60" class="id-box">
+  <label>Father / Spouse Name</label>
+  <input name="Father/Spouse">
+
+  <label>Age</label>
+  <input type="number" name="Age">
+
+  <label>Nationality</label>
+  <input name="Nationality" value="Indian">
+
+  <label>Transaction Type</label>
+  <input name="Transaction" value="Opening of Savings Account">
+
+  <label>Amount (₹)</label>
+  <input name="Amount">
+
+  <label>Mode</label>
+  <select name="Mode">
+    <option>Cash</option>
+    <option>Cheque</option>
+    <option>Transfer</option>
+  </select>
+
+  <label>PAN Declaration</label>
+  <select name="PAN Declaration">
+    <option>I do not have PAN</option>
+    <option>I have applied for PAN</option>
+  </select>
+
+  <label>Place</label>
+  <input name="Place">
+</div>
 </div>
 
-<div id="form60Box" class="id-section">
-<label>Form 60 Number</label>
-<input type="text" name="Form60 Number">
-<label>Form 60 Address</label>
-<input type="text" name="Form60 Address">
+<!-- SYSTEM GENERATED -->
+<div class="section">
+<h3>System Generated</h3>
+
+<label>Account Number</label>
+<input id="accountNumber" name="Account Number" readonly>
+
 <label>Date</label>
-<input type="date" name="Form60 Date">
-</div>
-</div>
-
-<!-- ACCOUNT DETAILS -->
-<div class="section">
-<div class="section-title">Account Details</div>
-
-<label>Account Type</label>
-<select name="Account Type" required>
-<option value="">Select</option>
-<option>Savings</option>
-<option>Current</option>
-<option>Zero Balance</option>
-</select>
-
-<label>Initial Deposit (₹)</label>
-<input type="number" name="Deposit" required>
-
-<label>Mode of Operation</label>
-<select name="Mode" required>
-<option value="">Select</option>
-<option>Self</option>
-<option>Either or Survivor</option>
-<option>Joint</option>
-</select>
+<input id="today" name="Date" readonly>
 </div>
 
-<!-- SIGNATURE -->
-<div class="section">
-<div class="section-title">Signature</div>
-<canvas id="signaturePad" width="600" height="200"></canvas><br><br>
-<button type="button" onclick="clearSignature()">Clear</button>
-<input type="hidden" name="Signature" id="signatureData">
-</div>
-
-<!-- DECLARATION -->
-<div class="footer">
-<label>
-<input type="checkbox" required>
-I declare that the information provided is true and correct.
-</label><br><br>
-<button type="submit" id="submitBtn" disabled>Submit Application</button>
-</div>
+<button id="submitBtn" type="submit" disabled>Submit & Download PDF</button>
 
 </form>
 </div>
 
 <script>
-// DATE
-const d=new Date();
-todayDate.value=`${String(d.getDate()).padStart(2,"0")}-${String(d.getMonth()+1).padStart(2,"0")}-${d.getFullYear()}`;
+const mobile=document.getElementById("mobile");
+const submitBtn=document.getElementById("submitBtn");
+const account=document.getElementById("accountNumber");
+document.getElementById("today").value=new Date().toISOString().slice(0,10);
 
-// ID toggle
-function selectID(t){
-matsBox.style.display=t==="mats"?"block":"none";
-form60Box.style.display=t==="form60"?"block":"none";
+function toggleID(id){
+  document.querySelectorAll(".id-box").forEach(d=>d.style.display="none");
+  document.getElementById(id).style.display="block";
 }
 
-// MOBILE + ACCOUNT NO
-let generated=false;
 mobile.addEventListener("input",()=>{
-mobile.value=mobile.value.replace(/\D/g,"");
-if(/^[0-9]{10}$/.test(mobile.value)){
-submitBtn.disabled=false;
-if(!generated){
-const last4=mobile.value.slice(-4);
-const first4=Math.floor(1000+Math.random()*9000);
-accountNumber.value=first4+last4;
-generated=true;
-}
-}else submitBtn.disabled=true;
+  mobile.value=mobile.value.replace(/\D/g,"");
+  if(mobile.value.length===10){
+    const last4=mobile.value.slice(-4);
+    const first4=Math.floor(1000+Math.random()*9000);
+    account.value=first4+last4;
+    submitBtn.disabled=false;
+  }else{
+    submitBtn.disabled=true;
+  }
 });
 
-// SIGNATURE PAD
-const canvas=signaturePad,ctx=canvas.getContext("2d");
-let draw=false;
-canvas.onmousedown=e=>{draw=true;ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);}
-canvas.onmousemove=e=>{if(draw){ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}}
-canvas.onmouseup=()=>draw=false;
-canvas.addEventListener("touchstart",e=>{
-draw=true;const t=e.touches[0];ctx.beginPath();
-ctx.moveTo(t.clientX-canvas.offsetLeft,t.clientY-canvas.offsetTop);
-});
-canvas.addEventListener("touchmove",e=>{
-if(draw){const t=e.touches[0];
-ctx.lineTo(t.clientX-canvas.offsetLeft,t.clientY-canvas.offsetTop);
-ctx.stroke();}
-});
-canvas.addEventListener("touchend",()=>draw=false);
-function clearSignature(){ctx.clearRect(0,0,canvas.width,canvas.height);}
+document.getElementById("accountForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF();
+  let y=10;
 
-// PDF GENERATION
-accountForm.addEventListener("submit",function(e){
-e.preventDefault();
-signatureData.value=canvas.toDataURL();
-const {jsPDF}=window.jspdf;
-const pdf=new jsPDF();
-let y=10;
-pdf.text("BANK ACCOUNT OPENING FORM",50,y); y+=10;
-new FormData(this).forEach((v,k)=>{
-if(k!=="Signature"){pdf.text(`${k}: ${v}`,10,y);y+=6;}
-});
-pdf.addPage();
-pdf.text("Signature",10,20);
-pdf.addImage(signatureData.value,"PNG",10,30,80,30);
-pdf.save("Account_Opening_Form.pdf");
-setTimeout(()=>this.submit(),500);
+  [...this.elements].forEach(el=>{
+    if(el.name && el.value){
+      pdf.text(el.name+": "+el.value,10,y);
+      y+=8;
+    }
+  });
+
+  pdf.save("Account_"+account.value+".pdf");
+  this.submit();
 });
 </script>
 
